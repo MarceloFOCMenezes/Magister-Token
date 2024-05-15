@@ -1,0 +1,344 @@
+@font-face {
+    font-family: inter;
+    src: url(../assets/font/Inter/Inter-VariableFont_slnt\,wght.ttf);
+}
+
+@font-face {
+    font-family: FrenchCanon;
+    src: url(../assets/font/IM_Fell_French_Canon_SC/IMFellFrenchCanonSC-Regular.ttf);
+}
+
+@font-face {
+    font-family: FrenchCanonnormal;
+    src: url(../assets/font/IM_Fell_French_Canon/IMFellFrenchCanon-Regular.ttf);
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    height: 15vh;
+    width: 100%;
+    background-color: #011526;
+    font-family: inter;
+    font-size: 15px;
+}
+
+.div_right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-self: start;
+    width: 50%;
+}
+
+.div_right img {
+    width: 6.0vw;
+    height: 11vh;
+    margin-left: 2em;
+}
+
+.div_left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 50%;
+    justify-content: end;
+}
+
+.div_left ul {
+    margin-right: 2em;
+    list-style: none;
+    display: flex;
+}
+
+.div_left ul li {
+    display: flex;
+    margin: 0 1em;
+    align-items: center;
+    width: auto;
+}
+
+
+.div_left ul li a {
+    width: 100%;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    transition: 100ms linear;
+}
+
+.div_left ul li a:hover,
+.div_left ul li a:focus {
+    font-size: 18px;
+}
+
+.div_left ul li img {
+    height: 50px;
+    width: fit-content;
+}
+
+section {
+    width: 100%;
+    height: 110vh;
+    display: flex;
+}
+
+.image {
+    height: 100%;
+    width: 50%;
+}
+
+.image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 100%;
+    width: 50%;
+    text-align: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+}
+
+.content p {
+    margin: 0;
+    width: 90%;
+}
+
+.content h1 {
+    font-family: FrenchCanon;
+    font-size: 40px;
+}
+
+.content img {
+    width: 70%;
+    margin: 25px 0;
+
+}
+
+#cnt1 {
+    background-color: #8C3503;
+}
+
+#cnt2 {
+    background-color: #896845;
+}
+
+#cnt3 {
+    background-color: #F2A03D;
+    color: black
+}
+
+#choose {
+    color: #F2A03D;
+}
+
+.button {
+    display: flex;
+    background-color: #F2A03D;
+    width: 45%;
+    height: 16vh;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.button a {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    font-family: FrenchCanon;
+    color: black;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.button:hover,
+.button:focus,
+.button a:hover,
+.button a:focus {
+    background-color: #896845;
+    color: white;
+    transition: 200ms linear;
+    border-radius: 10px;
+}
+
+#image3 {
+    background-image: url("../assets/contentimage3.png");
+    background-repeat: no-repeat;
+}
+
+.blurimage {
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.blurimage img {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    border-radius: 25px;
+    margin: 25px;
+    object-fit: cover;
+}
+
+#cnt4 {
+    background-color: #896845;
+}
+
+.form {
+    height: 100vh;
+    width: 100%;
+    background-image: url("../assets/formbackground.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.colorBackg {
+    background-color: rgba(140, 53, 3, 0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.card_form {
+    width: 40%;
+    margin: 20px;
+    background-color: #F2A03D;
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login {
+    height: 50%;
+}
+
+.cadastro {
+    height: 80%;
+}
+
+.card_form h3 {
+    color: #8C3503;
+    font-size: 25px;
+    margin-top: 0;
+    font-family: FrenchCanonnormal;
+}
+
+.card_form img {
+    width: 55%;
+    height: 8vh;
+    margin-top: 25px;
+}
+
+.card_form input {
+    display: flex;
+    width: 80%;
+    height: 30px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 4px black;
+    border: 0;
+    font-family: Inter;
+    font-size: 15px;
+}
+
+.card_form input:focus,
+.card_form input:hover {
+    border: 0;
+}
+
+#button_create {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: fit-content;
+    justify-content: space-around;
+}
+
+#button_create button {
+    height: 8vh;
+    width: 35%;
+    border: 0;
+    background-color: #8C3503;
+    color: white;
+    font-family: FrenchCanon;
+    font-size: 20px;
+    border-radius: 10px;
+    transition: 200ms linear;
+}
+
+#button_create button:hover {
+    background-color: #896845;
+    color: white;
+    transition: 200ms linear;
+    border-radius: 10px;
+}
+
+.div_desc {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 35%;
+}
+
+.div_desc span {
+    font-family: FrenchCanonnormal;
+    font-size: 20px;
+}
+
+.div_desc a {
+    text-decoration: none;
+    font-family: FrenchCanonnormal;
+    font-size: 20px;
+    color: #8C3503;
+    transition: 200ms linear;
+}
+
+.div_desc a:hover {
+    color: #896845;
+    transition: 200ms linear;
+}
+
+#button_create button {
+
+    border: 0;
+    background-color: #8C3503;
+    color: white;
+    font-family: FrenchCanon;
+    font-size: 20px;
+    border-radius: 10px;
+    transition: 200ms linear;
+    margin-bottom: 25px;
+}
+
+
+#button_create button:hover {
+    background-color: #896845;
+    color: white;
+    transition: 200ms linear;
+    border-radius: 10px;
+}
