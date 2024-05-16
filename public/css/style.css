@@ -342,3 +342,23 @@ section {
     transition: 200ms linear;
     border-radius: 10px;
 }
+
+#cardErro
+{
+    display: none;
+    width: 15%;
+    height: 20%;
+    border-radius: 10px;
+    background-color: #F2A03D;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    margin-top: 85px;
+}
+
+#mensagem_erro
+{
+    text-align: center;
+    font-size: 15px;
+    font-family: Inter;
+}
