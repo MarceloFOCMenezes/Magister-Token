@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta || MagisterToken</title>
+    <link rel="stylesheet" href="../css/dashboards.css">
+</head>
+
+<body onload="consultar(), listar()">
+    <header>
+        <div class="div_right">
+            <a href="./dashboard.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
+        </div>
+
+        <div class="div_left">
+            <ul>
+                <li><a href="./criarFicha.html">Gerenciar Ficha</a></li>
+                <li><a href="">Realizar Teste</a></li>
+                <li><img src="../assets/linha.png"></li>
+                <li> <img src="../assets/defaultProfilePic.png" alt=""></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="create_section">
+        <div class="blur_container">
+            <h1 id="titulo">
+                Titulo
+            </h1>
+            <div class="content_card">
+                <div class="title_form">
+                    <div class="form">
+                        <h4>Sistema</h4>
+                        <input disabled type="text" id="option_disable">
+                    </div>
+                    <div class="form"><h4>Criador:</h4><span id="nome_criador"></span></div>
+                </div>
+                <div class="corpo_form">
+                    <h4>Corpo</h4>
+                    <textarea disabled id="input_fixed_historia"></textarea>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="coment_section">
+        <h1>Comentarios</h1>
+        <div class="card_coment">
+            <div class="coment">
+                <div class="form" id="comentando"><h4>Comentando como:<span id="nome_comentando"></span></h4> </span></div>
+                <textarea id="input_comentario"></textarea>
+                <button onclick="enviar()">Enviar</button>
+            </div>
+            <div id="feed_container">
+
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
+
+<script>
+
+    function consultar() {
+        var idPubVar = sessionStorage.PUBLIC_ID;
+        var idUsuarioVar = sessionStorage.FK_USER;
+
+        fetch(`/publicacoes/consultar`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idPubServer: idPubVar,
+                idUsuarioServer: idUsuarioVar
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+
+                resposta.json().then(function (resposta) {
+                    titulo.innerHTML = resposta.titulo
+                    input_fixed_historia.innerHTML = resposta.historia
+                    nome_criador.innerHTML = `<b>${resposta.nome}<b>`
+                    nome_comentando.innerHTML = sessionStorage.NOME_USUARIO
+
+
+                    if (resposta.sistema == "dnd") {
+                        option_disable.value = 'Dungeons & Dragons'
+                    }
+                    if (resposta.sistema == "coc") {
+                        option_disable.value = 'Call of Cthulhu'
+                    }
+                    if (resposta.sistema == "pfr") {
+                        option_disable.value = 'Pathfinder'
+                    }
+                    if (resposta.sistema == "op") {
+                        option_disable.value = 'Ordem Paranormal'
+                    }
+                    if (resposta.sistema == 'otr') {
+                        option_disable.value = 'Outros'
+                    }
+                })
+
+            }
+        })
+    }
+
+    function listar() {
+        var idPubVar = sessionStorage.PUBLIC_ID;
+
+        fetch("/comentarios/listar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idPubServer: idPubVar
+            }),
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("feed_container");
+                    var mensagem = document.createElement("span");
+                    mensagem.innerHTML = "Nenhum comentário."
+                    feed.appendChild(mensagem);
+                    throw "Nenhum comentário!!";
+                }
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                    var feed = document.getElementById("feed_container");
+                for (let index = 0; index < resposta.length; index++) {
+                    var comentario = resposta[index]
+
+                    var divComentario = document.createElement("div");
+                    var spanNome = document.createElement("span");
+                    var textComentario = document.createElement("textarea");
+
+                    textComentario.disabled = true;
+                    textComentario.id = "texto_comentado"
+
+                    spanNome.innerHTML = "Criador: <b>" + comentario.nome + "</b> ";
+                    textComentario.innerHTML = comentario.comentario;
+
+                    divComentario.className ="coment"
+
+                    divComentario.appendChild(spanNome);
+                    divComentario.appendChild(textComentario);
+                    feed.appendChild(divComentario)
+
+                    
+                }
+                })
+                
+            }
+        })
+    }
+
+    function enviar() {
+        var idUsuarioVar = sessionStorage.ID_USUARIO;
+        var idPubVar = sessionStorage.PUBLIC_ID;
+        var comentarioVar = input_comentario.value;
+
+        if (comentarioVar == "") {
+            alert('Insira o comentário')
+        }
+        else if (comentarioVar.length > 2000) {
+            alert('Máximo de caractéres do comentario ultrapassados!')
+        }
+        else {
+            fetch("/comentarios/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    comentarioServer: comentarioVar,
+                    idUsuarioServer: idUsuarioVar,
+                    idPubServer: idPubVar
+                })
+            })
+                .then(function (resposta) {
+                    console.log('Resposta: ', resposta);
+
+                    if (resposta.ok) {
+                        alert('comentário adicionado');
+
+                        setTimeout(() => {
+                            window.location = "consultarPub.html"
+                        }, "2000");
+                    }
+                    else {
+                        throw "Houve um erro ao tentar realizar o cadastro!";
+                    }
+                })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
+            return false;
+        }
+    }
+
+</script>

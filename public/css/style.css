@@ -289,6 +289,7 @@ section {
     font-size: 20px;
     border-radius: 10px;
     transition: 200ms linear;
+    margin-bottom: 25px;
 }
 
 #button_create button:hover {
@@ -297,6 +298,7 @@ section {
     transition: 200ms linear;
     border-radius: 10px;
 }
+
 
 .div_desc {
     display: flex;
@@ -321,26 +323,6 @@ section {
 .div_desc a:hover {
     color: #896845;
     transition: 200ms linear;
-}
-
-#button_create button {
-
-    border: 0;
-    background-color: #8C3503;
-    color: white;
-    font-family: FrenchCanon;
-    font-size: 20px;
-    border-radius: 10px;
-    transition: 200ms linear;
-    margin-bottom: 25px;
-}
-
-
-#button_create button:hover {
-    background-color: #896845;
-    color: white;
-    transition: 200ms linear;
-    border-radius: 10px;
 }
 
 #cardErro

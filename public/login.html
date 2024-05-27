@@ -12,7 +12,6 @@
 
     <link rel="stylesheet" href="./css/estilo.css">
     <link rel="icon" href="./assets/LogoMagister.png">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
 </head>
 
 <body>
@@ -80,11 +79,10 @@
         if (emailVar == "" || senhaVar == "") {
             cardErro.style.display = "flex"
             mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
-            finalizarAguardar();
             return false;
         }
         else {
-            setInterval(sumirMensagem, 5000)
+
         }
 
         console.log("FORM LOGIN: ", emailVar);
@@ -97,7 +95,7 @@
             },
             body: JSON.stringify({
                 emailServer: emailVar,
-                senhaServer: senhaVar,
+                senhaServer: senhaVar
             })
         }).then(function (resposta) {
             console.log("ESTOU NO THEN DO entrar()!")
@@ -113,7 +111,7 @@
                     sessionStorage.ID_USUARIO = json.id;
 
                     setTimeout(function () {
-                        window.location = "";
+                        window.location = "./dashboard/dashboard.html";
                     }, 1000); // apenas para exibir o loading
 
                 });
@@ -134,7 +132,4 @@
         return false;
     }
 
-    function sumirMensagem() {
-        cardErro.style.display = "none"
-    }
 </script>

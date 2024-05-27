@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Publicação || MagisterToken</title>
+    <link rel="stylesheet" href="../css/dashboards.css">
+</head>
+
+<body>
+    <header>
+        <div class="div_right">
+            <img src="../assets/tinyLogo.png" alt="LogoMagisterToken">
+        </div>
+
+        <div class="div_left">
+            <ul>
+                <li><a href="./criarFicha.html">Gerenciar Ficha</a></li>
+                <li><a href="">Realizar Teste</a></li>
+                <li><img src="../assets/linha.png"></li>
+                <li> <img src="../assets/defaultProfilePic.png" alt=""></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="create_section">
+        <div class="blur_container">
+            <h1>
+                Compartilhe sua História
+            </h1>
+            <div class="content_card">
+                <div class="title_form">
+                    <div class="form">
+                        <h4>Título</h4>
+                        <input type="text" id="input_titulo">
+                    </div>
+                    <div class="form">
+                        <h4>Sistema</h4>
+                        <select id="select_sistemas">
+                            <option selected disabled value="#">Selecione um sistema</option>
+                            <option value="dnd">Dungeons & Dragons</option>
+                            <option value="coc">Call of Cthulhu</option>
+                            <option value="pfr">Pathfinder</option>
+                            <option value="op">Ordem Paranormal</option>
+                            <option value="otr">Outro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="corpo_form">
+                    <h4>Corpo</h4>
+                    <textarea id="input_historia"></textarea>
+                </div>
+
+                <button onclick="cadastrar()">Postar</button>
+            </div>
+        </div>
+
+    </section>
+</body>
+
+</html>
+
+<script>
+
+    function cadastrar() {
+        var tituloVar = input_titulo.value;
+        var sistemaVar = select_sistemas.value;
+        var historiaVar = input_historia.value;
+        var idUsuarioVar = sessionStorage.ID_USUARIO;
+
+        if (
+            tituloVar == "" ||
+            sistemaVar == "#" ||
+            historiaVar == ""
+        ) {
+            alert('Preencha todos os campos para postar!')
+        }
+        else if (historiaVar.length > 10000) {
+            alert('Maximo de caractéres de história ultrapassados!')
+        }
+        else if (tituloVar.length > 45) {
+            alert('Máximo de caractéres de título ultrapassados!')
+        }
+        else {
+            fetch("/publicacoes/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    tituloServer: tituloVar,
+                    sistemaServer: sistemaVar,
+                    historiaServer: historiaVar,
+                    idUsuarioServer: idUsuarioVar
+                })
+            })
+                .then(function (resposta) {
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+
+                        setTimeout(() => {
+                            window.location = "dashboard.html";
+                        }, "2000");
+
+                    } else {
+                        throw "Houve um erro ao tentar realizar o cadastro!";
+                    }
+                })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
+            return false;
+        }
+
+
+
+    }
+
+
+</script>
