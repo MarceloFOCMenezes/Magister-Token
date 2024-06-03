@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta || MagisterToken</title>
     <link rel="stylesheet" href="../css/dashboards.css">
+    <script src="../js/sessao.js"></script>
 </head>
 
-<body onload="consultar(), listar()">
+<body onload="consultar(), listar(), validarSessao()">
     <header>
         <div class="div_right">
             <a href="./dashboard.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
@@ -16,10 +17,9 @@
 
         <div class="div_left">
             <ul>
-                <li><a href="./criarFicha.html">Gerenciar Ficha</a></li>
-                <li><a href="">Realizar Teste</a></li>
+                <li><a href="./CriarPub.html">Compartilhe História</a></li>
                 <li><img src="../assets/linha.png"></li>
-                <li> <img src="../assets/defaultProfilePic.png" alt=""></li>
+                <li><a href="./telaUsuario.html"> <img src="../assets/defaultProfilePic.png" alt=""></a></li>
             </ul>
         </div>
     </header>
@@ -35,7 +35,12 @@
                         <h4>Sistema</h4>
                         <input disabled type="text" id="option_disable">
                     </div>
-                    <div class="form"><h4>Criador:</h4><span id="nome_criador"></span></div>
+                    <div class="form">
+                        <h4>Criador:</h4><span id="nome_criador"></span>
+                    </div>
+                    <div class="form">
+                        <h4>Data de Criação:</h4><span id="dataPub"></span>
+                    </div>
                 </div>
                 <div class="corpo_form">
                     <h4>Corpo</h4>
@@ -48,8 +53,10 @@
         <h1>Comentarios</h1>
         <div class="card_coment">
             <div class="coment">
-                <div class="form" id="comentando"><h4>Comentando como:<span id="nome_comentando"></span></h4> </span></div>
-                <textarea id="input_comentario"></textarea>
+                <div class="form" id="comentando">
+                    <h4>Comentando como:<span id="nome_comentando"></span></h4> </span>
+                </div>
+                <textarea id="input_comentario" placeholder="Máximo 2000 caractéres"></textarea>
                 <button onclick="enviar()">Enviar</button>
             </div>
             <div id="feed_container">
@@ -84,6 +91,7 @@
                     input_fixed_historia.innerHTML = resposta.historia
                     nome_criador.innerHTML = `<b>${resposta.nome}<b>`
                     nome_comentando.innerHTML = sessionStorage.NOME_USUARIO
+                    dataPub.innerHTML = resposta.dataPub
 
 
                     if (resposta.sistema == "dnd") {
@@ -132,29 +140,29 @@
                     console.log("Dados recebidos: ", JSON.stringify(resposta));
 
                     var feed = document.getElementById("feed_container");
-                for (let index = 0; index < resposta.length; index++) {
-                    var comentario = resposta[index]
+                    for (let index = 0; index < resposta.length; index++) {
+                        var comentario = resposta[index]
 
-                    var divComentario = document.createElement("div");
-                    var spanNome = document.createElement("span");
-                    var textComentario = document.createElement("textarea");
+                        var divComentario = document.createElement("div");
+                        var spanNome = document.createElement("span");
+                        var textComentario = document.createElement("textarea");
 
-                    textComentario.disabled = true;
-                    textComentario.id = "texto_comentado"
+                        textComentario.disabled = true;
+                        textComentario.id = "texto_comentado"
 
-                    spanNome.innerHTML = "Criador: <b>" + comentario.nome + "</b> ";
-                    textComentario.innerHTML = comentario.comentario;
+                        spanNome.innerHTML = "Criador: <b>" + comentario.nome + "</b> ";
+                        textComentario.innerHTML = comentario.comentario;
 
-                    divComentario.className ="coment"
+                        divComentario.className = "coment"
 
-                    divComentario.appendChild(spanNome);
-                    divComentario.appendChild(textComentario);
-                    feed.appendChild(divComentario)
+                        divComentario.appendChild(spanNome);
+                        divComentario.appendChild(textComentario);
+                        feed.appendChild(divComentario)
 
-                    
-                }
+
+                    }
                 })
-                
+
             }
         })
     }

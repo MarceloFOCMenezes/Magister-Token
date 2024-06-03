@@ -40,6 +40,7 @@ function autenticar(req, res) {
 
 }
 
+
 function cadastrar(req, res) {
     // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
     var nome = req.body.nomeServer;
@@ -56,26 +57,37 @@ function cadastrar(req, res) {
         res.status(400).send("Sua senha está undefined!");
     } else {
 
-        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
-        usuarioModel.cadastrar(nome, email, senha)
+        usuarioModel.verificarCadastro(email)
             .then(
-                function (resultado) {
-                    res.json(resultado);
+                function(resultado) {
+                    console.log(resultado.length)
+                if (resultado.length > 0) {
+                    res.status(409).send("Email já utilizado")
+                    console.log("O email já foi utilizado")
+                    return false;
                 }
-            ).catch(
-                function (erro) {
-                    console.log(erro);
-                    console.log(
-                        "\nHouve um erro ao realizar o cadastro! Erro: ",
-                        erro.sqlMessage
-                    );
-                    res.status(500).json(erro.sqlMessage);
+                else {
+                    usuarioModel.cadastrar(nome, email, senha)
+                        .then(
+                            function (resultado) {
+                                res.json(resultado);
+                            }
+                        ).catch(
+                            function (erro) {
+                                console.log(erro);
+                                console.log(
+                                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                                    erro.sqlMessage
+                                );
+                                res.status(500).json(erro.sqlMessage);
+                            }
+                        );
                 }
-            );
-    }
+            })
+            }
 }
 
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
 }

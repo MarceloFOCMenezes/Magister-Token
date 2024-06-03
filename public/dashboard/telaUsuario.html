@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta || MagisterToken</title>
+    <link rel="stylesheet" href="../css/dashboards.css">
+    <script src="../js/sessao.js"></script>
+</head>
+
+<body onload=" listar(), listarRanking(), validarSessao()">
+    <header>
+        <div class="div_right">
+            <a href="./dashboard.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
+        </div>
+
+        <div class="div_left">
+            <ul>
+                <li><a href="./CriarPub.html">Compartilhe História</a></li>
+                <li><img src="../assets/linha.png"></li>
+                <li><a href="./telaUsuario.html"> <img src="../assets/defaultProfilePic.png" alt=""></a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="user_section">
+        <div id="HisUsuario" class="pub">
+            <h3>Suas últimas histórias</h3>
+            <div id="viewPub" class="viewPub">
+
+            </div>
+        </div>
+        <div id="estatisticasUsuario" class="pub">
+            <h3>Ranking de Histórias</h3>
+            <div id="estatisticas" class="viewPub">
+
+            </div>
+
+        </div>
+
+    </section>
+</body>
+
+</html>
+
+<script>
+    function listar() {
+        var idUsuarioVar = sessionStorage.ID_USUARIO
+        fetch("/publicacoes/listarPubUsuario", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuarioVar
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var feed = document.getElementById("estatísticasUsuario");
+                    var mensagem = document.createElement("h1")
+                    mensagem.innerHTML = `Nenhuma história encontrada`
+                    feed.appendChild(mensagem);
+                    throw "Nenhum resultado encontrado";
+                }
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                    var feed = document.getElementById("viewPub");
+                    for (var index = 0; index < resposta.length; index++) {
+                        var publicacao = resposta[index];
+
+                        let id = index + 1;
+
+                        var divPublicacao = document.createElement("div");
+                        var div_title = document.createElement("div");
+                        var spanTitulo = document.createElement("span");
+                        var spanNome = document.createElement("span");
+                        var spanQtdComent = document.createElement("span")
+                        var textHistoria = document.createElement("div");
+                        var idInput = document.createElement("input")
+                        var fkInput = document.createElement("input")
+
+                        divPublicacao.id = `publicacao${index + 1}`
+                        divPublicacao.setAttribute("idPub", publicacao.idPub);
+                        textHistoria.disabled = true;
+                        divPublicacao.className = "pubUsuario"
+                        div_title.className = "user_form_title"
+                        textHistoria.className = "div_historia"
+
+
+                        idInput.value = publicacao.idPub;
+                        spanTitulo.innerHTML = `Título: ${publicacao.titulo}`;
+                        spanNome.innerHTML = `Nome: ${publicacao.nome}`;
+                        spanQtdComent.innerHTML = `<img src="../assets/iconComent.png"> ${publicacao.qtdComent}`
+                        textHistoria.innerHTML = publicacao.historia;
+                        divPublicacao.addEventListener("click", function () {
+                            redirecionar(`publicacao${id}`)
+                        });
+
+                        div_title.appendChild(spanNome);
+                        div_title.appendChild(spanTitulo)
+                        div_title.appendChild(spanQtdComent);
+                        divPublicacao.appendChild(div_title);
+                        divPublicacao.appendChild(textHistoria);
+                        feed.appendChild(divPublicacao)
+                    }
+
+                })
+            }
+        })
+    }
+
+    function listarRanking() {
+        var idUsuarioVar = sessionStorage.ID_USUARIO
+        fetch("/publicacoes/listarRanking", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuarioVar
+            })
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                if (resposta.status == 204) {
+                    var Ranking = document.getElementById("estatisticasUsuario");
+                    var mensagem = document.createElement("h1")
+                    mensagem.innerHTML = `Nenhuma história encontrada`
+                    feed.appendChild(mensagem);
+                    throw "Nenhum resultado encontrado";
+                }
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+
+                    var feed = document.getElementById("estatisticas");
+                    for (var index = 0; index < resposta.length; index++) {
+                        var publicacao = resposta[index];
+                        
+                        let id = index + 1
+                        
+                        var divPublicacao = document.createElement("div");
+                        var div_title = document.createElement("div");
+                        var spanTitulo = document.createElement("span");
+                        var spanQtdComent = document.createElement("span")
+                        var spanRanking = document.createElement("span")
+                        
+                        divPublicacao.id = `ranking${index + 1}`
+                        divPublicacao.setAttribute("idPub", publicacao.idPub);
+                        divPublicacao.className = "rankingPub"
+                        div_title.className = "user_form_title"
+                        div_title.id = "titleRanking"
+                        
+
+                        spanRanking.innerHTML = `${index + 1}º`
+                        spanTitulo.innerHTML = `Título: ${publicacao.titulo}`;
+                        spanQtdComent.innerHTML = `<img src="../assets/iconComent.png"> ${publicacao.qtdComent}`
+                        divPublicacao.addEventListener("click", function () {
+                            redirecionar(`ranking${id}`)
+                        });
+
+                        div_title.appendChild(spanRanking)
+                        div_title.appendChild(spanTitulo)
+                        div_title.appendChild(spanQtdComent);
+                        divPublicacao.appendChild(div_title);
+                        feed.appendChild(divPublicacao)
+                    }
+                }
+                )
+            }
+        })
+    }
+
+
+    function redirecionar(idPub) {
+
+
+        var idDiv_pub = document.getElementById(idPub);
+        var publicId = idDiv_pub.getAttribute("idPub");
+        sessionStorage.setItem("PUBLIC_ID", publicId);
+        window.location.href = "ConsultarPub.html";
+
+    }
+
+
+</script>

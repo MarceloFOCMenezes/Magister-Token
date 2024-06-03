@@ -6,25 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard || MagisterToken</title>
     <link rel="stylesheet" href="../css/dashboards.css">
+    <script src="../js/sessao.js"></script>
 </head>
 
-<body onload="listar()">
+<body onload="listar(), validarSessao()">
     <header>
         <div class="div_right">
-            <img src="../assets/tinyLogo.png" alt="LogoMagisterToken">
+            <a href="./dashboard.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
         </div>
 
         <div class="div_left">
             <ul>
                 <li><a href="./CriarPub.html">Compartilhe História</a></li>
-                <li><a href="">Realizar Teste</a></li>
                 <li><img src="../assets/linha.png"></li>
-                <li> <img src="../assets/defaultProfilePic.png" alt=""></li>
+                <li><a href="./telaUsuario.html"> <img src="../assets/defaultProfilePic.png" alt=""></a></li>
             </ul>
         </div>
     </header>
     <section class="main_section">
         <div id="feed_main">
+            <div id = "div_saudacao"></div>
+            
 
         </div>
     </section>
@@ -33,13 +35,14 @@
 </html>
 
 <script>
+    div_saudacao.innerHTML = `Olá ${sessionStorage.NOME_USUARIO}`
     function listar() {
         fetch("/publicacoes/listar").then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
                     var feed = document.getElementById("feed_main");
                     var mensagem = document.createElement("h1")
-                    mensagem.innerHTML = `Nenhum resultado encontrado`
+                    mensagem.innerHTML = `Nenhuma história encontrada`
                     feed.appendChild(mensagem);
                     throw "Nenhum resultado encontrado";
                 }
@@ -56,7 +59,8 @@
                         var divPublicacao = document.createElement("div");
                         var div_title = document.createElement("div");
                         var spanTitulo = document.createElement("span");
-                        var spanNome = document.createElement("span")
+                        var spanNome = document.createElement("span");
+                        var spanQtdComent = document.createElement("span")
                         var textHistoria = document.createElement("textarea");
                         var idInput = document.createElement("input")
                         var fkInput = document.createElement("input")
@@ -71,6 +75,7 @@
                         idInput.value = publicacao.idPub;
                         spanTitulo.innerHTML = `Título: ${publicacao.titulo}`;
                         spanNome.innerHTML = `Nome: ${publicacao.nome}`;
+                        spanQtdComent.innerHTML = `<img src="../assets/iconComent.png"> ${publicacao.qtdComent}`
                         textHistoria.innerHTML = publicacao.historia;
                         divPublicacao.addEventListener("click", function () {
                             redirecionar(`publicacao${id}`)
@@ -78,6 +83,7 @@
 
                         div_title.appendChild(spanNome);
                         div_title.appendChild(spanTitulo)
+                        div_title.appendChild(spanQtdComent);
                         divPublicacao.appendChild(div_title);
                         divPublicacao.appendChild(textHistoria);
                         feed.appendChild(divPublicacao)

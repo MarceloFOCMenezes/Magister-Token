@@ -34,6 +34,7 @@ function cadastrar(req, res) {
     }
 }
 
+
 function consultar(req, res) {
     var idPub = req.body.idPubServer;
 
@@ -45,7 +46,8 @@ function consultar(req, res) {
                         titulo: resultado[0].titulo,
                         sistema: resultado[0].sistema,
                         historia: resultado[0].historia,
-                        nome: resultado[0].nome
+                        nome: resultado[0].nome,
+                        dataPub: resultado[0].dataPublicacao
                     })
 
                     console.log(resultado)
@@ -65,24 +67,60 @@ function consultar(req, res) {
         )
 }
 
+function listarPubUsuario(req, res) {
+    var idUsuario = req.body.idUsuarioServer;
+
+    publicacaoModel.listarPubUsuario(idUsuario)
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            }
+            else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            console.log("Houve um erro ao buscar as Publicações: ", erro.sqlMessage)
+            res.status(500).json(erro.sqlMessage)
+        })
+
+}
+
 function listar(req, res) {
     publicacaoModel.listar()
-    .then(function (resultado) {
-        if (resultado.length > 0) {
-            res.status(200).json(resultado);
-        } else {
-            res.status(204).send("Nenhum resultado encontrado!")
-        }
-    }).catch(function (erro) {
-        console.log(erro);
-        console.log("Houve um erro ao buscar os avisos: ", erro.sqlMessage);
-        res.status(500).json(erro.sqlMessage);
-    });
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            console.log("Houve um erro ao buscar as histórias: ", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
+function listarRanking(req, res) {
+    var idUsuario = req.body.idUsuarioServer;
+
+    publicacaoModel.listarRanking(idUsuario)
+        .then(function (resultado) {
+            if (resultado.length >= 0) {
+                res.status(200).json(resultado)
+            }
+            else{
+                res.status(204).send("Houve um erro ao buscar as histórias: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage)
+            }
+        })
 }
 
 module.exports = {
     cadastrar,
     consultar,
-    listar
+    listar,
+    listarPubUsuario,
+    listarRanking
 }
 

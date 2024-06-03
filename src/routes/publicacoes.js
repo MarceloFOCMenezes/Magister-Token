@@ -15,4 +15,12 @@ router.get("/listar", function (req, res) {
     publicacaoController.listar(req, res)
 })
 
+router.post("/listarPubUsuario", function(req, res) {
+    publicacaoController.listarPubUsuario(req, res)
+})
+
+router.post("/listarRanking", function(req, res){
+    publicacaoController.listarRanking(req, res)
+})
+
 module.exports = router
