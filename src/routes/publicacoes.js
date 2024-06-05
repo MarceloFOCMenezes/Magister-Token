@@ -23,4 +23,8 @@ router.post("/listarRanking", function(req, res){
     publicacaoController.listarRanking(req, res)
 })
 
+router.post("/plotarGrafico", function(req, res){
+    publicacaoController.plotarGrafico(req, res)
+})
+
 module.exports = router

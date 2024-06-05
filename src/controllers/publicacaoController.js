@@ -106,13 +106,34 @@ function listarRanking(req, res) {
 
     publicacaoModel.listarRanking(idUsuario)
         .then(function (resultado) {
-            if (resultado.length >= 0) {
+            if (resultado.length > 0) {
                 res.status(200).json(resultado)
             }
-            else{
-                res.status(204).send("Houve um erro ao buscar as histórias: ", erro.sqlMessage);
-                res.status(500).json(erro.sqlMessage)
+            else {
+                res.status(204).send();
             }
+        }).catch(function (erro) {
+            console.log("Houve um erro ao buscar as histórias:")
+            res.status(500).json(erro.sqlMessage)
+        })
+}
+
+function plotarGrafico(req, res) {
+    var fkUsuario = req.body.fkUsuarioServer;
+
+    publicacaoModel.plotarGrafico(fkUsuario)
+        .then(function (resultado) {
+
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            }
+            else {
+                res.status(204).send("Nenhum sistema encontrado")
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            console.log("Houve um erro ao puxar as informações de sistemas: ")
+            res.status(500).json(erro.sqlMessage)
         })
 }
 
@@ -121,6 +142,7 @@ module.exports = {
     consultar,
     listar,
     listarPubUsuario,
-    listarRanking
+    listarRanking,
+    plotarGrafico
 }
 

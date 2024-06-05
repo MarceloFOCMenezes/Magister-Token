@@ -7,16 +7,18 @@
     <title>Criar Publicação || MagisterToken</title>
     <link rel="stylesheet" href="../css/dashboards.css">
     <script src="../js/sessao.js"></script>
+    <link rel="icon" href="../assets/LogoMagister.png">
 </head>
 
 <body onload="validarSessao()">
     <header>
         <div class="div_right">
-            <a href="./dashboard.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
+            <a href="./feed.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
         </div>
 
         <div class="div_left">
             <ul>
+                <li><a href="./feed.html">Feed</a></li>
                 <li><span id="span_escolhido">Compartilhe História</span></li>
                 <li><img src="../assets/linha.png"></li>
                 <li><a href="./telaUsuario.html"> <img src="../assets/defaultProfilePic.png" alt=""></a></li>
@@ -33,7 +35,7 @@
                 <div class="title_form">
                     <div class="form">
                         <h4>Título</h4>
-                        <input type="text" id="input_titulo" placeholder="Máximo 45 caractéres">
+                        <input type="text" id="input_titulo" maxlength="45" placeholder="Máximo 45 caractéres">
                     </div>
                     <div class="form">
                         <h4>Sistema</h4>
@@ -49,7 +51,7 @@
                 </div>
                 <div class="corpo_form">
                     <h4>Corpo</h4>
-                    <textarea id="input_historia" placeholder="Máximo 10000 caractéres"></textarea>
+                    <textarea id="input_historia" maxlength="10000" placeholder="Máximo 10000 caractéres"></textarea>
                 </div>
 
                 <button onclick="cadastrar()">Postar</button>
@@ -62,6 +64,7 @@
 </html>
 
 <script>
+    var contador = 0 
 
     function cadastrar() {
         var tituloVar = input_titulo.value;
@@ -82,7 +85,12 @@
         else if (tituloVar.length > 45) {
             alert('Máximo de caractéres de título ultrapassados!')
         }
+        else if(contador >= 1)
+        {
+            alert("Publicação já inserida... Aguarde...")
+        }
         else {
+            
             fetch("/publicacoes/cadastrar", {
                 method: "POST",
                 headers: {
@@ -99,11 +107,11 @@
                     console.log("resposta: ", resposta);
 
                     if (resposta.ok) {
+                        contador ++
 
                         setTimeout(() => {
-                            window.location = "dashboard.html";
+                            window.location = "feed.html";
                         }, "2000");
-
                     } else {
                         throw "Houve um erro ao tentar realizar o cadastro!";
                     }

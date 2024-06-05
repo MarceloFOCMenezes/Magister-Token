@@ -34,5 +34,5 @@ function cadastrar(nome, email, senha) {
 module.exports = {
     autenticar,
     cadastrar,
-    verificarCadastro
+    verificarCadastro,
 };

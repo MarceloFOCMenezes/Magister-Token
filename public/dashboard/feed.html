@@ -4,19 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard || MagisterToken</title>
+    <title>Feed || MagisterToken</title>
     <link rel="stylesheet" href="../css/dashboards.css">
     <script src="../js/sessao.js"></script>
+    <link rel="icon" href="../assets/LogoMagister.png">
 </head>
 
 <body onload="listar(), validarSessao()">
     <header>
         <div class="div_right">
-            <a href="./dashboard.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
+            <a href="../index.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
         </div>
 
         <div class="div_left">
             <ul>
+                <li><span id="span_escolhido">Feed</span></li>
                 <li><a href="./CriarPub.html">Compartilhe História</a></li>
                 <li><img src="../assets/linha.png"></li>
                 <li><a href="./telaUsuario.html"> <img src="../assets/defaultProfilePic.png" alt=""></a></li>
@@ -24,6 +26,7 @@
         </div>
     </header>
     <section class="main_section">
+        <a href="./ConsultarPub.html"></a>
         <div id="feed_main">
             <div id = "div_saudacao"></div>
             
@@ -41,8 +44,9 @@
             if (resposta.ok) {
                 if (resposta.status == 204) {
                     var feed = document.getElementById("feed_main");
-                    var mensagem = document.createElement("h1")
-                    mensagem.innerHTML = `Nenhuma história encontrada`
+                    var mensagem = document.createElement("span")
+                    mensagem.innerHTML = `Nenhuma história contada <br>
+                                            <a href="./CriarPub.html">Conte a Sua Primeira História</a>`
                     feed.appendChild(mensagem);
                     throw "Nenhum resultado encontrado";
                 }

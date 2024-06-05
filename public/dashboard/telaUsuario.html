@@ -7,16 +7,19 @@
     <title>Consulta || MagisterToken</title>
     <link rel="stylesheet" href="../css/dashboards.css">
     <script src="../js/sessao.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="../assets/LogoMagister.png">
 </head>
 
-<body onload=" listar(), listarRanking(), validarSessao()">
+<body onload=" listar(), listarRanking(), validarSessao(), plotarGrafico()">
     <header>
         <div class="div_right">
-            <a href="./dashboard.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
+            <a href="./feed.html"><img src="../assets/tinyLogo.png" alt="LogoMagisterToken"></a>
         </div>
 
         <div class="div_left">
             <ul>
+                <li><a href="./feed.html">Feed</a></li>
                 <li><a href="./CriarPub.html">Compartilhe História</a></li>
                 <li><img src="../assets/linha.png"></li>
                 <li><a href="./telaUsuario.html"> <img src="../assets/defaultProfilePic.png" alt=""></a></li>
@@ -31,12 +34,15 @@
 
             </div>
         </div>
-        <div id="estatisticasUsuario" class="pub">
-            <h3>Ranking de Histórias</h3>
-            <div id="estatisticas" class="viewPub">
-
+        <div id="rankingUsuario" class="pub">
+            <h3>Histórias mais engajadas</h3>
+            <div id="ranking" class="viewPub">
             </div>
+        </div>
 
+        <div id="estatísticasUsuario" class="pub">
+            <h3>Sistemas mais utilizados</h3>
+            <canvas id="grafico_sistema"></canvas>
         </div>
 
     </section>
@@ -45,6 +51,8 @@
 </html>
 
 <script>
+    var lista_sistema = []
+    var lista_dado = []
     function listar() {
         var idUsuarioVar = sessionStorage.ID_USUARIO
         fetch("/publicacoes/listarPubUsuario", {
@@ -58,9 +66,9 @@
         }).then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
-                    var feed = document.getElementById("estatísticasUsuario");
+                    var feed = document.getElementById("viewPub");
                     var mensagem = document.createElement("h1")
-                    mensagem.innerHTML = `Nenhuma história encontrada`
+                    mensagem.innerHTML = `Nenhuma História Contada`
                     feed.appendChild(mensagem);
                     throw "Nenhum resultado encontrado";
                 }
@@ -126,9 +134,9 @@
         }).then(function (resposta) {
             if (resposta.ok) {
                 if (resposta.status == 204) {
-                    var Ranking = document.getElementById("estatisticasUsuario");
+                    var feed = document.getElementById("ranking");
                     var mensagem = document.createElement("h1")
-                    mensagem.innerHTML = `Nenhuma história encontrada`
+                    mensagem.innerHTML = `Nenhuma história Engajada.`
                     feed.appendChild(mensagem);
                     throw "Nenhum resultado encontrado";
                 }
@@ -136,24 +144,24 @@
                 resposta.json().then(function (resposta) {
                     console.log("Dados recebidos: ", JSON.stringify(resposta));
 
-                    var feed = document.getElementById("estatisticas");
+                    var feed = document.getElementById("ranking");
                     for (var index = 0; index < resposta.length; index++) {
                         var publicacao = resposta[index];
-                        
+
                         let id = index + 1
-                        
+
                         var divPublicacao = document.createElement("div");
                         var div_title = document.createElement("div");
                         var spanTitulo = document.createElement("span");
                         var spanQtdComent = document.createElement("span")
                         var spanRanking = document.createElement("span")
-                        
+
                         divPublicacao.id = `ranking${index + 1}`
                         divPublicacao.setAttribute("idPub", publicacao.idPub);
                         divPublicacao.className = "rankingPub"
                         div_title.className = "user_form_title"
                         div_title.id = "titleRanking"
-                        
+
 
                         spanRanking.innerHTML = `${index + 1}º`
                         spanTitulo.innerHTML = `Título: ${publicacao.titulo}`;
@@ -172,6 +180,86 @@
                 )
             }
         })
+    }
+
+    function plotarGrafico() {
+        var fkUsuario = sessionStorage.ID_USUARIO;
+
+        fetch("/publicacoes/plotarGrafico", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fkUsuarioServer: fkUsuario
+            })
+        }).then(function (resposta) {
+            if (resposta.status == 204) {
+                var grafico_mensagem = document.getElementById("estatísticasUsuario")
+                var mensagem = document.createElement("h1")
+                mensagem.innerHTML = `Não há histórias`
+                grafico_mensagem.appendChild(mensagem)
+                grafico_sistema.style.display = "none"
+
+            }
+            else if (resposta.status == 200) {
+                const ctx = document.getElementById("grafico_sistema")
+
+                resposta.json().then(function (resposta) {
+                    console.log("Dados recebidos: ", JSON.stringify(resposta));
+                    for (var index = 0; index < resposta.length; index++) {
+                        var sistema = resposta[index].sistema;
+                        var quantidade = Number(resposta[index].quantidade);
+                        if (sistema == "dnd") {
+                            sistema = "Dungeons & Dragons"
+                        }
+                        if (sistema == "coc") {
+                            sistema = "Call of Cthulhu"
+                        }
+                        if (sistema == "pfr") {
+                            sistema = "Pathfinder"
+                        }
+                        if (sistema == "op") {
+                            sistema = "Ordem Paranormal"
+                        }
+                        if (sistema == "otr") {
+                            sistema = "Outros"
+                        }
+
+                        lista_sistema.push(sistema)
+                        lista_dado.push(quantidade)
+                        var sistemas = lista_sistema.toString()
+                    }
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: lista_sistema,
+                            datasets: [{
+                                label: 'Quantidade',
+                                data: lista_dado,
+                                backgroundColor: [
+                                    'rgb(4, 144, 136)',
+                                    'rgb(232, 60, 52)',
+                                    'rgb(124,64,159)',
+                                    'rgb(128,180,236)',
+                                    'rgb(248, 156, 4)',
+                                ],
+                            }],
+                        },
+                        options: {
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: 'white'
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                })
+            }})
+
     }
 
 

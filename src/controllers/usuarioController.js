@@ -59,32 +59,32 @@ function cadastrar(req, res) {
 
         usuarioModel.verificarCadastro(email)
             .then(
-                function(resultado) {
+                function (resultado) {
                     console.log(resultado.length)
-                if (resultado.length > 0) {
-                    res.status(409).send("Email já utilizado")
-                    console.log("O email já foi utilizado")
-                    return false;
-                }
-                else {
-                    usuarioModel.cadastrar(nome, email, senha)
-                        .then(
-                            function (resultado) {
-                                res.json(resultado);
-                            }
-                        ).catch(
-                            function (erro) {
-                                console.log(erro);
-                                console.log(
-                                    "\nHouve um erro ao realizar o cadastro! Erro: ",
-                                    erro.sqlMessage
-                                );
-                                res.status(500).json(erro.sqlMessage);
-                            }
-                        );
-                }
-            })
-            }
+                    if (resultado.length > 0) {
+                        res.status(409).send("Email já utilizado")
+                        console.log("O email já foi utilizado")
+                        return false;
+                    }
+                    else {
+                        usuarioModel.cadastrar(nome, email, senha)
+                            .then(
+                                function (resultado) {
+                                    res.json(resultado);
+                                }
+                            ).catch(
+                                function (erro) {
+                                    console.log(erro);
+                                    console.log(
+                                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                                        erro.sqlMessage
+                                    );
+                                    res.status(500).json(erro.sqlMessage);
+                                }
+                            );
+                    }
+                })
+    }
 }
 
 module.exports = {
