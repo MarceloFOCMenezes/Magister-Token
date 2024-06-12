@@ -22,7 +22,8 @@
                 <li><a href="./feed.html">Feed</a></li>
                 <li><a href="./CriarPub.html">Compartilhe História</a></li>
                 <li><img src="../assets/linha.png"></li>
-                <li><a href="./telaUsuario.html"> <img src="../assets/defaultProfilePic.png" alt=""></a></li>
+                <li> <span id="span_escolhido"></span></li>
+                <li><a onclick="sairSessao()">Sair do Perfil</a></li>
             </ul>
         </div>
     </header>
@@ -51,6 +52,8 @@
 </html>
 
 <script>
+    span_escolhido.innerHTML = sessionStorage.NOME_USUARIO;
+    var nome = sessionStorage.NOME_USUARIO;
     var lista_sistema = []
     var lista_dado = []
     function listar() {

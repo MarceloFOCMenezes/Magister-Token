@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="./css/estilo.css">
     <link rel="icon" href="./assets/LogoMagister.png">
-     <link rel="icon" href="./assets/LogoMagister.png">
+    <link rel="icon" href="./assets/LogoMagister.png">
 </head>
 
 <body>
@@ -118,15 +118,17 @@
                         sessionStorage.NOME_USUARIO = json.nome;
                         sessionStorage.ID_USUARIO = json.id;
 
+                        cardErro.style.display = "flex"
+                        mensagem_erro.innerHTML = "Autenticado com sucesso! Redirecionando para Feed...";
+
                         setTimeout(function () {
                             window.location = "./dashboard/feed.html";
                         }, 1000); // apenas para exibir o loading
 
                     });
 
-                } 
-                else if(resposta.status = 403)
-                {
+                }
+                else if (resposta.status = 403) {
                     cardErro.style.display = "flex"
                     mensagem_erro.innerHTML = "Email e/ou senha inválido(s)";
                 }

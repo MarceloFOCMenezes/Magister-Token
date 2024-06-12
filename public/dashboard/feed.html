@@ -21,7 +21,8 @@
                 <li><span id="span_escolhido">Feed</span></li>
                 <li><a href="./CriarPub.html">Compartilhe História</a></li>
                 <li><img src="../assets/linha.png"></li>
-                <li><a href="./telaUsuario.html"> <img src="../assets/defaultProfilePic.png" alt=""></a></li>
+                <li><a href="./telaUsuario.html"> <span id="b_nome"></span></a></li>
+                <li><a onclick="sairSessao()">Sair do Perfil</a></li>
             </ul>
         </div>
     </header>
@@ -38,6 +39,7 @@
 </html>
 
 <script>
+    b_nome.innerHTML = sessionStorage.NOME_USUARIO;
     div_saudacao.innerHTML = `Olá ${sessionStorage.NOME_USUARIO}`
     function listar() {
         fetch("/publicacoes/listar").then(function (resposta) {

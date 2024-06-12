@@ -8,4 +8,10 @@ function validarSessao() {
     } 
 }
 
+function sairSessao()
+{
+    sessionStorage.clear();
+    window.location = "../index.html";
+}
+
 

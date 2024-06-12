@@ -6,7 +6,7 @@ function cadastrar(idUsuario, sistema, titulo, historia)
     INSERT INTO publicacao (fkUsuario, sistema, titulo, historia) VALUES 
     (${idUsuario}, '${sistema}', '${titulo}', '${historia}')
     `
-    console.log(`Foram inseridos $id}, ${sistema}, ${titulo}, ${historia}`)
+    console.log(`Foram inseridos ${idUsuario}, ${sistema}, ${titulo}, ${historia}`)
     return database.executar(instrucaoSql)
 
 }

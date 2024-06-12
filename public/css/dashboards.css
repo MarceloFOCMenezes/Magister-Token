@@ -366,6 +366,15 @@ section {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+}
+.card_coment span {
+  font-family: FrenchCanon;
+  font-size: 20px;
+  margin: 0;
+  align-self: flex-start;
+
 }
 
 .coment {
